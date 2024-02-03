@@ -1,9 +1,13 @@
+import Link from "next/link";
+
 const Header = () => {
   return (
     <header className="bg-blue-500 p-4 text-white">
-      <div className="container mx-auto flex justify-between items-center">
+      <div className="container mx-auto flex justify-between flex-wrap items-center">
         <div>
-          <h1 className="text-2xl font-bold">Vita Soft Solutions</h1>
+          <Link href={"/"} className="text-2xl font-bold">
+            Vita Soft Solutions
+          </Link>
         </div>
         <nav className="space-x-4">
           <a href="#" className="hover:underline">

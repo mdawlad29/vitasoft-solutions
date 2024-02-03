@@ -1,21 +1,26 @@
 "use client";
 import { Button } from "antd";
 import { useState } from "react";
+import { MdAdd } from "react-icons/md";
 import AddTodoModal from "../Modal/AddTodoModal";
 
 const CreateTodos = () => {
-  const [open, setOpen] = useState(false);
-  const showModal = () => {
-    setOpen(true);
-  };
+  const [openAddModal, setOpenAddModal] = useState(false);
 
   return (
-    <div>
-      <Button type="primary" onClick={showModal}>
-        Open Modal with async logic
+    <div className="flex justify-end my-8 container md:mx-auto mx-5">
+      <Button
+        type="primary"
+        onClick={() => setOpenAddModal(true)}
+        className="!bg-blue-400 w-40 flex items-center justify-center gap-2 text-lg h-[48px]"
+      >
+        <MdAdd className="text-xl" />
+        Add Todo
       </Button>
 
-      {open && <AddTodoModal open={open} setOpen={setOpen} />}
+      {openAddModal && (
+        <AddTodoModal open={openAddModal} setOpen={setOpenAddModal} />
+      )}
     </div>
   );
 };

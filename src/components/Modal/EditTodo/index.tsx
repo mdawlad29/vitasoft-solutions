@@ -1,57 +1,75 @@
-import { Modal } from "antd";
+import { Button, Form, Input, Typography } from "antd";
 import { useRouter } from "next/navigation";
-import { FormEventHandler, useState } from "react";
+import { FormEventHandler } from "react";
+import ModalLayout from "..";
+import { editTodo } from "../../../../api";
+
+type FieldType = {
+  title?: string;
+  desc?: string;
+};
 
 const EditTodoModal = ({
   editOpenModal,
   setEditOpenModal,
 }: {
-  editOpenModal: boolean;
+  editOpenModal: any;
   setEditOpenModal: (editOpenModal: boolean) => boolean | void;
 }) => {
   const router = useRouter();
-  const [confirmLoading, setConfirmLoading] = useState(false);
-
-  const handleOk = () => {
-    setConfirmLoading(true);
-    setTimeout(() => {
-      setEditOpenModal(false);
-      setConfirmLoading(false);
-    }, 2000);
-  };
-
+  console.log(editOpenModal);
   const handleCancel = () => {
     setEditOpenModal(false);
   };
-  const [newTaskValue, setNewTaskValue] = useState<string>("");
 
-  const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
-    e.preventDefault();
+  const handleSubmit: FormEventHandler<HTMLFormElement> = async (
+    value: any
+  ) => {
+    await editTodo({
+      id: editOpenModal?.id || "",
+      title: value?.title,
+      desc: value?.desc,
+    });
+    setEditOpenModal(false);
+    router.refresh();
   };
 
   return (
-    <Modal
-      title="Title"
-      open={editOpenModal}
-      onOk={handleOk}
-      confirmLoading={confirmLoading}
-      onCancel={handleCancel}
-    >
-      <form onSubmit={handleSubmit}>
-        <h2 className="font-bold text-3xl">Edit task</h2>
-        <div className="modal-action">
-          <input
-            type="text"
-            value={newTaskValue}
-            onChange={(e) => setNewTaskValue(e.target.value)}
-            className="border-[red] border"
-          />
-          <button type="submit" className="bg-[red] px-5 py-1">
-            submit
-          </button>
-        </div>
-      </form>
-    </Modal>
+    <ModalLayout open={editOpenModal} close={handleCancel}>
+      <div>
+        <Typography.Title className="font-semibold text-gray-800 mt-8 mb-3 !text-2xl text-center">
+          Update Todo
+        </Typography.Title>
+
+        <Form
+          name="basic"
+          onFinish={handleSubmit}
+          layout="vertical"
+          initialValues={{
+            title: editOpenModal?.title,
+            desc: editOpenModal?.desc,
+          }}
+        >
+          <Form.Item<FieldType> label="Title" name="title">
+            <Input className="h-[44px] !bg-[#eeebebcc]" />
+          </Form.Item>
+
+          <Form.Item<FieldType> label="Descriptions" name="desc">
+            <Input.TextArea className="h-[44px] !bg-[#eeebebcc]" rows={4} />
+          </Form.Item>
+
+          <Form.Item>
+            <Button
+              type="primary"
+              htmlType="submit"
+              className="!bg-cyan-400 w-full mb-4 text-xl h-[40px]"
+            >
+              Updated
+            </Button>
+          </Form.Item>
+        </Form>
+      </div>
+    </ModalLayout>
   );
 };
 
