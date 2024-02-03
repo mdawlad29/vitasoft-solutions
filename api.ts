@@ -1,6 +1,7 @@
 import { ITask } from "./types/tasks";
 
-const baseUrl = "http://localhost:3001";
+const baseUrl =
+  "https://vitasoft-solutions-daj6.vercel.app/" || "http://localhost:3001";
 
 export const getAllTodos = async (): Promise<ITask[]> => {
   try {
